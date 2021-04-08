@@ -24,6 +24,7 @@ class MyApp extends StatelessWidget {
       title: 'Nong Num Theiw',
       routes: map,
       initialRoute: initialRount,
+      debugShowCheckedModeBanner: false,
     );
   }
 }
