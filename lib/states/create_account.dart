@@ -33,7 +33,10 @@ class _CreateAccountState extends State<CreateAccount> {
   void initState() {
     super.initState();
     findLatLng();
+    iniFirst();
+  }
 
+  void iniFirst() {
     for (var i = 0; i < 5; i++) {
       files.add(null);
     }
