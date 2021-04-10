@@ -5,6 +5,7 @@ import 'package:nongnumtheiw/body/read_qr_code.dart';
 import 'package:nongnumtheiw/body/show_list_shop.dart';
 import 'package:nongnumtheiw/body/show_map.dart';
 import 'package:nongnumtheiw/models/shop_model.dart';
+import 'package:nongnumtheiw/utility/my_style.dart';
 import 'package:nongnumtheiw/widgets/show_progress.dart';
 
 class Home extends StatefulWidget {
@@ -51,15 +52,15 @@ class _HomeState extends State<Home> {
   List<BottomNavigationBarItem> bottonNavigationBarItem() {
     return <BottomNavigationBarItem>[
       BottomNavigationBarItem(
-        icon: Icon(Icons.filter_1),
+        icon: Icon(Icons.store),
         label: titles[0],
       ),
       BottomNavigationBarItem(
-        icon: Icon(Icons.filter_2),
+        icon: Icon(Icons.map),
         label: titles[1],
       ),
       BottomNavigationBarItem(
-        icon: Icon(Icons.filter_3),
+        icon: Icon(Icons.qr_code_scanner),
         label: titles[2],
       ),
     ].toList();
@@ -68,7 +69,7 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
+      appBar: AppBar(backgroundColor: MyStyle().primary,
         title: Text(titles[index]),
         actions: [buildIAuthen(context)],
       ),
@@ -76,6 +77,8 @@ class _HomeState extends State<Home> {
       bottomNavigationBar: BottomNavigationBar(
         items: bottonNavigationBarItem(),
         type: BottomNavigationBarType.fixed,
+        selectedItemColor: MyStyle().primary,
+        iconSize: 48,
         currentIndex: index,
         onTap: (value) {
           setState(() {

@@ -7,7 +7,11 @@ class MyStyle {
 
   TextStyle darkNormalStyle() => TextStyle(color: dark);
 
-  
+  TextStyle darkH1Style() => TextStyle(
+        color: dark,
+        fontSize: 24,
+        fontWeight: FontWeight.bold,
+      );
 
   MyStyle();
 }
