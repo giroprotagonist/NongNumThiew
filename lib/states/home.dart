@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:nongnumtheiw/body/read_qr_code.dart';
 import 'package:nongnumtheiw/body/show_list_shop.dart';
 import 'package:nongnumtheiw/body/show_map.dart';
@@ -19,10 +21,55 @@ class _HomeState extends State<Home> {
   int index = 0;
   List<String> titles = ['Show List Shop', 'Show Map', 'Read QRcode'];
 
+  bool locationServiceEnable;
+  LocationPermission locationPermission;
+  LatLng latLng;
+  
+
   @override
   void initState() {
     super.initState();
-    readData();
+    findLatLng();
+  }
+
+  Future<Null> findLatLng() async {
+    locationPermission = await Geolocator.checkPermission();
+    // print('================================================');
+    // print(' permission ==> $locationPermission ');
+    // print('================================================');
+
+    switch (locationPermission) {
+      case LocationPermission.denied:
+        await Geolocator.requestPermission().then((value) async {
+          if (value == LocationPermission.deniedForever) {
+            Navigator.pushNamedAndRemoveUntil(
+                context, '/deniedForever', (route) => false);
+          } else {
+            var position = await findPosition();
+            latLng = LatLng(position.latitude, position.longitude);
+            readData();
+          }
+        });
+        break;
+      case LocationPermission.deniedForever:
+        Navigator.pushNamedAndRemoveUntil(
+            context, '/deniedForever', (route) => false);
+        break;
+      default:
+        var position = await findPosition();
+        latLng = LatLng(position.latitude, position.longitude);
+        readData();
+    }
+  }
+
+  Future<Position> findPosition() async {
+    Position position;
+    try {
+      position = await Geolocator.getCurrentPosition();
+      return position;
+    } catch (e) {
+      return null;
+    }
   }
 
   Future<Null> readData() async {
@@ -41,6 +88,7 @@ class _HomeState extends State<Home> {
         widgets.add(ShowListShop(shopModels: shopModels));
         widgets.add(ShowMap(
           shopModels: shopModels,
+          latLng: latLng,
         ));
         widgets.add(ReadQrCode(
           shopModels: shopModels,
@@ -69,7 +117,8 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(backgroundColor: MyStyle().primary,
+      appBar: AppBar(
+        backgroundColor: MyStyle().primary,
         title: Text(titles[index]),
         actions: [buildIAuthen(context)],
       ),

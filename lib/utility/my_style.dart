@@ -13,5 +13,16 @@ class MyStyle {
         fontWeight: FontWeight.bold,
       );
 
+  TextStyle darkH2Style() => TextStyle(
+        color: dark,
+        fontSize: 16,
+        fontWeight: FontWeight.w700,
+      );
+
+      TextStyle darkH3Style() => TextStyle(
+        color: dark,
+        fontSize: 16,
+        // fontWeight: FontWeight.w200,
+      );
   MyStyle();
 }
